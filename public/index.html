@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoTest · API testing &amp; load testing</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<style>
+:root{color-scheme:light dark;--bg:#f6f7f9;--card:#fff;--fg:#14181f;--mut:#667085;--bd:#e2e5ea;--ac:#00a3c4;--acd:#007f99;--ok:#12a150;--bad:#d92d20;--warn:#b54708;--okb:#e6f6ec;--badb:#fdecea;--code:#f0f2f5}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1116;--card:#171b22;--fg:#e8ebf0;--mut:#8b94a3;--bd:#2a303a;--ac:#2cc5e6;--acd:#2cc5e6;--ok:#3fb950;--bad:#f85149;--warn:#e3a008;--okb:#12301d;--badb:#3a1a18;--code:#0f1318}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--fg)}
+header{background:var(--card);border-bottom:1px solid var(--bd)}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+.logo{font-size:20px;font-weight:700;letter-spacing:-.3px}.logo span{color:var(--ac)}
+.tag{font-size:13px;color:var(--mut)}
+nav{display:flex;gap:4px}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--mut);padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+nav button[aria-selected=true]{color:var(--fg);border-color:var(--ac)}
+main{padding:24px 0 60px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:20px}
+h2{font-size:16px;margin:0 0 14px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:9px 11px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ac);outline-offset:-1px}
+textarea{font:13px/1.5 ui-monospace,Menlo,monospace;min-height:260px;resize:vertical;tab-size:2}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.span2{grid-column:span 2}
+.bar{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.btn{background:var(--ac);color:#04222a;border:0;border-radius:8px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:wait}.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--bd);font-weight:600}
+.hint{font-size:12px;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-size:22px;letter-spacing:-.5px}.stat small{color:var(--mut);font-size:12px}
+.stat.bad b{color:var(--bad)}.stat.good b{color:var(--ok)}
+.pct{display:grid;grid-template-columns:44px 1fr 80px;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.track{height:10px;background:var(--bg);border-radius:6px;overflow:hidden}.fill{height:100%;background:var(--ac);border-radius:6px;transition:width .5s}
+.pct.p99 .fill,.pct.max .fill{background:var(--warn)}.pct span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--okb);color:var(--ok)}.chip.e{background:var(--badb);color:var(--bad)}
+.case{border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.case .b{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--okb);color:var(--ok)}
+.case.f .b{background:var(--badb);color:var(--bad)}.case .m{color:var(--mut);font-size:13px;font-variant-numeric:tabular-nums}
+.case ul{grid-column:1/-1;margin:0;padding-left:18px;color:var(--bad);font-size:13px}
+.banner{padding:12px 14px;border-radius:10px;font-weight:600;margin-bottom:14px}.banner.ok{background:var(--okb);color:var(--ok)}.banner.f{background:var(--badb);color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600}
+code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:12px;word-break:break-all}
+.hide{display:none}
+@media(max-width:560px){.span2{grid-column:auto}}
+</style></head>
+<body>
+<header><div class="wrap">
+  <div class="top"><div class="logo">Go<span>Test</span></div><div class="tag">Concurrent API testing &amp; latency-correct load testing · Go backend on Vercel</div></div>
+  <nav role="tablist"><button role="tab" aria-selected="true" data-tab="suite">Functional suite</button><button role="tab" aria-selected="false" data-tab="load">Load test</button></nav>
+</div></header>
+
+<main class="wrap">
+<!-- SUITE -->
+<div id="suite">
+  <div class="card"><h2>Test suite</h2>
+    <div class="grid" style="margin-bottom:12px">
+      <div><label for="tpl">Template</label><select id="tpl"><option value="chain">Chained requests</option><option value="basic">Single GET</option><option value="fail">Failing assertions (demo)</option></select></div>
+    </div>
+    <label for="json">Suite (JSON)</label><textarea id="json" spellcheck="false"></textarea>
+    <div class="bar"><button class="btn" id="runBtn">Run suite</button><button class="btn ghost" id="fmtBtn">Format JSON</button>
+      <span class="hint">Assertions: status · json (exists/eq) · header (contains) · body_contains · latency_lt_ms. Use <code>{{var}}</code> after a <code>capture</code>.</span></div>
+  </div>
+  <div id="suiteOut"></div>
+</div>
+
+<!-- LOAD -->
+<div id="load" class="hide">
+  <div class="card"><h2>Load test</h2>
+    <div class="grid">
+      <div class="span2"><label for="t">Target URL</label><input id="t" value="https://jsonplaceholder.typicode.com"></div>
+      <div><label for="m">Method</label><select id="m"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></div>
+      <div><label for="p">Path</label><input id="p" value="/todos/1"></div>
+      <div><label for="c">Concurrency (≤50)</label><input id="c" type="number" min="1" max="50" value="10"></div>
+      <div><label for="d">Duration, s (≤8)</label><input id="d" type="number" min="1" max="8" value="4"></div>
+      <div><label for="r">Rate req/s (0 = closed)</label><input id="r" type="number" min="0" max="500" value="0"></div>
+    </div>
+    <div class="bar"><button class="btn" id="loadBtn">Start load test</button>
+      <span class="hint">Rate &gt; 0 = open-loop: latency is measured from each request's <em>intended</em> send time.</span></div>
+  </div>
+  <div id="loadOut"></div>
+  <div class="card hide" id="histCard"><h2>Run history (this session)</h2>
+    <table><thead><tr><th>Mode</th><th>Req</th><th>Err</th><th>req/s</th><th>p50</th><th>p99</th><th>max</th></tr></thead><tbody id="hist"></tbody></table></div>
+  <div class="card"><h2>Need bigger runs?</h2>
+    <p class="hint" style="margin-top:0">The hosted API blocks private IPs and caps load. Use the CLI for heavy or local targets:</p>
+    <code id="cli"></code></div>
+</div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>n>=100?n.toFixed(0):n.toFixed(1);
+
+/* tabs */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  ['suite','load'].forEach(id=>$(id).classList.toggle('hide',id!==b.dataset.tab));
+});
+
+/* templates */
+const J='https://jsonplaceholder.typicode.com';
+const TPL={
+ chain:{target:J,tests:[
+  {name:'get todo',request:{method:'GET',path:'/todos/1'},assert:[{status:200},{json:'id',eq:1},{latency_lt_ms:2000}],capture:{uid:'json:userId'}},
+  {name:'get user (chained)',request:{method:'GET',path:'/users/{{uid}}'},assert:[{status:200},{json:'email',exists:true}]}]},
+ basic:{target:J,tests:[{name:'list posts',request:{path:'/posts'},assert:[{status:200},{header:'Content-Type',contains:'json'}]}]},
+ fail:{target:J,tests:[{name:'wrong expectations',request:{path:'/todos/1'},assert:[{status:201},{json:'id',eq:999},{body_contains:'nope'}]}]}};
+const setTpl=()=>$('json').value=JSON.stringify(TPL[$('tpl').value],null,2);
+$('tpl').onchange=setTpl;setTpl();
+$('fmtBtn').onclick=()=>{try{$('json').value=JSON.stringify(JSON.parse($('json').value),null,2)}catch(e){alert('Invalid JSON: '+e.message)}};
+
+async function post(url,body,btn,label){
+  btn.disabled=true;const old=btn.textContent;btn.textContent=label;
+  try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const t=await r.text();try{return JSON.parse(t)}catch{return{error:'Server returned '+r.status+' (is the API deployed? try `vercel dev`)'}}}
+  catch(e){return{error:e.message}}
+  finally{btn.disabled=false;btn.textContent=old}}
+
+/* suite */
+$('runBtn').onclick=async()=>{
+  let s;try{s=JSON.parse($('json').value)}catch(e){$('suiteOut').innerHTML=`<div class="banner f">Invalid JSON: ${esc(e.message)}</div>`;return}
+  const r=await post('/api/run',s,$('runBtn'),'Running…');
+  if(r.error){$('suiteOut').innerHTML=`<div class="banner f">${esc(r.error)}</div>`;return}
+  const ok=r.failed===0;
+  $('suiteOut').innerHTML=`<div class="banner ${ok?'ok':'f'}">${ok?'All tests passed':r.failed+' failed'} · ${r.passed} passed${ok?'':' · CI would exit 1'}</div>`+
+   r.cases.map(c=>{const bad=c.error||(c.failures||[]).length;
+    return `<div class="case ${bad?'f':''}"><span class="b">${bad?'FAIL':'PASS'}</span><strong>${esc(c.name)}</strong><span class="m">${c.status||'–'} · ${c.latency_ms.toFixed(1)} ms</span>`+
+    (bad?`<ul>${c.error?`<li>${esc(c.error)}</li>`:''}${(c.failures||[]).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`:'')+`</div>`}).join('');
+};
+
+/* load */
+const hist=[];
+function cli(){const r=+$('r').value;$('cli').textContent=`gotest load -u ${$('t').value} -p ${$('p').value} -c ${$('c').value} -d ${$('d').value}s`+(r>0?` -r ${r}`:'')}
+['t','p','c','d','r'].forEach(i=>$(i).oninput=cli);cli();
+
+$('loadBtn').onclick=async()=>{
+  $('loadOut').innerHTML=`<div class="card"><span class="hint">Generating load for ${esc($('d').value)}s…</span></div>`;
+  const r=await post('/api/load',{target:$('t').value,method:$('m').value,path:$('p').value,concurrency:+$('c').value,duration_ms:+$('d').value*1000,rate:+$('r').value},$('loadBtn'),'Running…');
+  if(r.error){$('loadOut').innerHTML=`<div class="banner f">${esc(r.error)}</div>`;return}
+  const rows=[['p50',r.p50_ms],['p90',r.p90_ms],['p95',r.p95_ms],['p99',r.p99_ms],['max',r.max_ms]];
+  const mx=Math.max(r.max_ms,1),errPct=r.requests?r.errors/r.requests*100:0;
+  $('loadOut').innerHTML=`<div class="card"><h2>Results · ${esc(r.mode)}</h2>
+   <div class="stats">
+    <div class="stat"><b>${r.rps.toFixed(0)}</b><small>requests / sec</small></div>
+    <div class="stat"><b>${r.requests}</b><small>total requests</small></div>
+    <div class="stat ${r.errors?'bad':'good'}"><b>${errPct.toFixed(1)}%</b><small>${r.errors} errors</small></div>
+    <div class="stat"><b>${fmt(r.p99_ms)} ms</b><small>p99 latency</small></div></div>
+   ${rows.map(([k,v])=>`<div class="pct ${k}"><span>${k}</span><div class="track"><div class="fill" style="width:${Math.max(v/mx*100,1)}%"></div></div><span>${fmt(v)} ms</span></div>`).join('')}
+   <div class="chips">${Object.entries(r.status||{}).map(([k,v])=>`<span class="chip ${k>=400?'e':''}">${k} × ${v}</span>`).join('')}</div></div>`;
+  hist.unshift(r);$('histCard').classList.remove('hide');
+  $('hist').innerHTML=hist.slice(0,8).map(h=>`<tr><td>${esc(h.mode)}</td><td>${h.requests}</td><td>${h.errors}</td><td>${h.rps.toFixed(0)}</td><td>${fmt(h.p50_ms)}</td><td>${fmt(h.p99_ms)}</td><td>${fmt(h.max_ms)}</td></tr>`).join('');
+};
+</script></body></html>

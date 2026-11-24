@@ -1,0 +1,4 @@
+{
+  "outputDirectory": "public",
+  "functions": { "api/*.go": { "maxDuration": 30 } }
+}

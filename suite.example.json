@@ -1,0 +1,10 @@
+{
+  "target": "https://jsonplaceholder.typicode.com",
+  "tests": [
+    { "name": "get todo", "request": { "method": "GET", "path": "/todos/1" },
+      "assert": [ { "status": 200 }, { "json": "id", "eq": 1 }, { "latency_lt_ms": 2000 } ],
+      "capture": { "uid": "json:userId" } },
+    { "name": "get user (chained)", "request": { "method": "GET", "path": "/users/{{uid}}" },
+      "assert": [ { "status": 200 }, { "json": "email", "exists": true } ] }
+  ]
+}
